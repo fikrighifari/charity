@@ -1,1 +1,1 @@
-# Charity svlete App
+# Charity Svelte App
