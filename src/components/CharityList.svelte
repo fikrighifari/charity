@@ -1,15 +1,16 @@
 <script>
   import Modal from './Modal.svelte';
   export let charities;
+  export let isModalOpen = false;
 
   function calculateFunded(pledged, target) {
-    return  Math.round((1 / (target / pledged)) * 100);
+    return Math.round((1 / (target / pledged)) * 100);
   }
 
   function formatCurrency(nominal) {
     return nominal.toLocaleString('id-ID', {
-      style: "currency",
-      currency: "IDR",
+      style: 'currency',
+      currency: 'IDR',
     });
   }
 
@@ -19,7 +20,13 @@
     return Math.round(Math.abs(delta / oneDay));
   }
 
-  
+  function handleButton() {
+    isModalOpen = true;
+  }
+
+  function handleCloseModal(){
+    isModalOpen = false;
+  }
 </script>
 
 <!-- popularCauses section -->
@@ -41,91 +48,99 @@
       {#each charities as Charity}
         <div class="row">
           <div class="col-lg-4 col-md-6">
-            <!-- modal goes here -->
-            <!-- Modal -->
-            <Modal>
-              <div
-              class="modal fade"
-              id="exampleModal"
-              tabindex="-1"
-              role="dialog"
-              aria-labelledby="exampleModalLabel"
-              aria-hidden="true"
-            >
-              <div class="modal-dialog" role="document">
-                <div class="modal-content">
-                  <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">
-                      Splash Drone 3 a Fully Waterproof Drone that floats
-                    </h5>
-                    <button
-                      type="button"
-                      class="close"
-                      data-dismiss="modal"
-                      aria-label="Close"
-                    >
-                      <span aria-hidden="true">&times;</span>
-                    </button>
-                  </div>
-                  <div class="modal-body">
-                    <form>
-                      <div class="form-group">
-                        <label for="exampleInputAmount">Amount donation</label>
-                        <input
-                          required
-                          type="number"
-                          class="form-control"
-                          id="exampleInputAmount"
-                          aria-describedby="amountHelp"
-                          placeholder="Enter amount"
-                        />
+            {#if isModalOpen === true}
+              <Modal>
+                <!-- modal goes here -->
+                <!-- Modal -->
+                <div
+                  class="modal fade show"
+                  id="exampleModal"
+                  tabindex="-1"
+                  role="dialog"
+                  aria-labelledby="exampleModalLabel"
+                  
+                >
+                  <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                      <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">
+                          {Charity.title}
+                        </h5>
+                        <button
+                          type="button"
+                          class="close"
+                          data-dismiss="modal"
+                          aria-label="Close"
+                          on:click={
+                            handleCloseModal
+                          }
+                        >
+                          <span aria-hidden="true">&times;</span>
+                        </button>
                       </div>
-                      <div class="form-group">
-                        <label for="exampleInputName">Your name</label>
-                        <input
-                          required
-                          type="text"
-                          class="form-control"
-                          id="exampleInputName"
-                          aria-describedby="nameHelp"
-                          placeholder="Enter full name"
-                        />
+                      <div class="modal-body">
+                        <form>
+                          <div class="form-group">
+                            <label for="exampleInputAmount"
+                              >Amount donation</label
+                            >
+                            <input
+                              required
+                              type="number"
+                              class="form-control"
+                              id="exampleInputAmount"
+                              aria-describedby="amountHelp"
+                              placeholder="Enter amount"
+                            />
+                          </div>
+                          <div class="form-group">
+                            <label for="exampleInputName">Your name</label>
+                            <input
+                              required
+                              type="text"
+                              class="form-control"
+                              id="exampleInputName"
+                              aria-describedby="nameHelp"
+                              placeholder="Enter full name"
+                            />
+                          </div>
+                          <div class="form-group">
+                            <label for="exampleInputEmail1">Email address</label
+                            >
+                            <input
+                              required
+                              type="email"
+                              class="form-control"
+                              id="exampleInputEmail1"
+                              aria-describedby="emailHelp"
+                              placeholder="Enter email"
+                            />
+                          </div>
+                          <div class="form-check">
+                            <input
+                              type="checkbox"
+                              class="form-check-input"
+                              id="exampleCheck1"
+                            />
+                            <label class="form-check-label" for="exampleCheck1"
+                              >I Agree</label
+                            >
+                          </div>
+                        </form>
                       </div>
-                      <div class="form-group">
-                        <label for="exampleInputEmail1">Email address</label>
-                        <input
-                          required
-                          type="email"
-                          class="form-control"
-                          id="exampleInputEmail1"
-                          aria-describedby="emailHelp"
-                          placeholder="Enter email"
-                        />
-                      </div>
-                      <div class="form-check">
-                        <input
-                          type="checkbox"
-                          class="form-check-input"
-                          id="exampleCheck1"
-                        />
-                        <label class="form-check-label" for="exampleCheck1"
-                          >I Agree</label
+                      <div class="modal-footer">
+                        <button type="button" class="btn btn-primary"
+                          >Continue</button
                         >
                       </div>
-                    </form>
-                  </div>
-                  <div class="modal-footer">
-                    <button type="button" class="btn btn-primary"
-                      >Continue</button
-                    >
+                    </div>
                   </div>
                 </div>
-              </div>
-            </div>
-            </Modal>
+              </Modal>
+            {/if}
             <div class="xs-popular-item xs-box-shadow">
               <div class="xs-item-header">
-                <img src="{Charity.thumbnail}" alt="" />
+                <img src={Charity.thumbnail} alt="" />
 
                 <div class="xs-skill-bar">
                   <div class="xs-skill-track">
@@ -133,10 +148,10 @@
                       <span
                         class="number-percentage-count number-percentage"
                         data-value="90"
-                        data-animation-duration="3500">
+                        data-animation-duration="3500"
+                      >
                         {calculateFunded(Charity.pledged, Charity.target)}
-                        </span
-                      >%
+                      </span>%
                     </p>
                   </div>
                 </div>
@@ -147,9 +162,7 @@
                   <li><a href="">{Charity.category}</a></li>
                 </ul>
 
-                <a href="#" class="xs-post-title xs-mb-30"
-                  >{Charity.title}</a
-                >
+                <a href="#" class="xs-post-title xs-mb-30">{Charity.title}</a>
 
                 <ul class="xs-list-with-content">
                   <li>{formatCurrency(Charity.pledged)}<span>Pledged</span></li>
@@ -157,21 +170,22 @@
                     <span
                       class="number-percentage-count number-percentage"
                       data-value="90"
-                      data-animation-duration="3500">
+                      data-animation-duration="3500"
+                    >
                       {calculateFunded(Charity.pledged, Charity.target)}
-                      </span
-                    >% <span>Funded</span>
+                    </span>% <span>Funded</span>
                   </li>
                   <li>
                     {calculateDaysRemaining(Charity.date_end)}
-                    <span>Days to go</span></li>
+                    <span>Days to go</span>
+                  </li>
                 </ul>
 
                 <span class="xs-separetor" />
 
                 <div class="row xs-margin-0">
                   <div class="xs-round-avatar">
-                    <img src="{Charity.profile_photo}" alt="" />
+                    <img src={Charity.profile_photo} alt="" />
                   </div>
                   <div class="xs-avatar-title">
                     <a href="#"><span>By</span>{Charity.profile_name}</a>
@@ -180,14 +194,14 @@
 
                 <span class="xs-separetor" />
 
-                <a
-                  href="#"
+                <button
+                  on:click={handleButton}
                   data-toggle="modal"
                   data-target="#exampleModal"
                   class="btn btn-primary btn-block"
                 >
                   Donate This Cause
-                </a>
+                </button>
               </div>
               <!-- .xs-item-content END -->
             </div>
@@ -200,13 +214,6 @@
   </div>
   <!-- .container end -->
 </section>
-<!-- End popularCauses section -->
-
-<style>
-  .xs-list-with-content {
-    font-size: 12px;
-  }
-</style>
 
 <!-- <div>
   <h1>Charity List</h1>
@@ -220,3 +227,12 @@
     <h5>Kosong</h5>
   {/if}
 </div> -->
+
+<!-- End popularCauses section -->
+<style>
+
+  .show {
+    display: block;
+    background-color: rgba(0, 0, 0, 0.30);
+  }
+</style>
